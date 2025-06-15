@@ -1,0 +1,6 @@
+{
+  "name": "Codex: The AI-Powered Writing Studio",
+  "description": "An AI-powered writing application for authors, featuring a writing environment and AI assistance to help with creativity and refinement. This version demonstrates a core writing area and an AI 'Muse' for enhancing text.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
