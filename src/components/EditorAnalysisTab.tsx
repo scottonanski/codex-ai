@@ -12,7 +12,7 @@ interface EditorAnalysisTabProps {
 const EditorAnalysisTab: React.FC<EditorAnalysisTabProps> = ({ suggestions, isLoading, error }) => {
   if (isLoading) {
     return (
-      <div className="p-6 flex flex-col items-center justify-center h-full bg-codex-light dark:bg-codex-dark text-codex-light-text-dim dark:text-codex-dark-text-dim">
+      <div className="p-6 flex flex-col items-center justify-center h-full bg-base-100 text-base-content/70">
         <Loader size="lg" />
         <p className="mt-4 text-lg">Editor AI is analyzing your text...</p>
       </div>
@@ -21,7 +21,7 @@ const EditorAnalysisTab: React.FC<EditorAnalysisTabProps> = ({ suggestions, isLo
 
   if (error) {
     return (
-      <div className="p-4 sm:p-6 bg-codex-light dark:bg-codex-dark h-full">
+      <div className="p-4 sm:p-6 bg-base-100 h-full">
         <Alert type="error" message={`Analysis Error: ${error}`} />
          <div className="mt-6 text-center text-codex-light-text-dim dark:text-codex-dark-text-dim">
             <PencilSwooshIcon className="w-16 h-16 mx-auto mb-4 opacity-30" />
@@ -35,7 +35,7 @@ const EditorAnalysisTab: React.FC<EditorAnalysisTabProps> = ({ suggestions, isLo
     return (
       <div className="p-6 text-center text-codex-light-text-dim dark:text-codex-dark-text-dim flex flex-col items-center justify-center h-full bg-codex-light dark:bg-codex-dark">
         <PencilSwooshIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
-        <h3 className="text-lg font-semibold mb-2 text-codex-light-text dark:text-codex-dark-text">Editor Analysis</h3>
+        <h3 className="text-lg font-semibold mb-2 text-base-content">Editor Analysis</h3>
         <p className="text-sm">
           No suggestions at the moment.
         </p>
@@ -47,19 +47,19 @@ const EditorAnalysisTab: React.FC<EditorAnalysisTabProps> = ({ suggestions, isLo
   }
 
   return (
-    <div className="p-3 sm:p-4 bg-codex-light dark:bg-codex-dark h-full overflow-y-auto custom-scrollbar">
-      <h3 className="text-lg font-semibold mb-3 px-1 text-codex-light-text dark:text-codex-dark-text">
+    <div className="p-3 sm:p-4 bg-base-100 h-full overflow-y-auto custom-scrollbar">
+      <h3 className="text-lg font-semibold mb-3 px-1 text-base-content">
         Editor's Suggestions ({suggestions.length})
       </h3>
       <div className="space-y-3 sm:space-y-4">
         {suggestions.map((item) => (
           <div 
             key={item.id} 
-            className="p-3 sm:p-4 rounded-lg shadow-md border border-codex-light-darker dark:border-codex-dark-lighter bg-codex-light-dark dark:bg-codex-dark-light"
+            className="p-3 sm:p-4 rounded-lg shadow-md border border-base-300 bg-base-200"
           >
             <span 
               className="px-2.5 py-1 text-xs font-semibold rounded-full mb-2 inline-block
-                         bg-codex-primary/10 text-codex-primary dark:bg-codex-primary/20 dark:text-codex-primary"
+                         badge badge-primary badge-outline"
             >
               {item.category || "Suggestion"}
             </span>
@@ -80,7 +80,7 @@ const EditorAnalysisTab: React.FC<EditorAnalysisTabProps> = ({ suggestions, isLo
             
             <div>
               <p className="text-xs text-codex-light-text-dim dark:text-codex-dark-text-dim mb-0.5">Reason:</p>
-              <p className="text-sm text-codex-light-text dark:text-codex-dark-text">
+              <p className="text-sm text-base-content">
                 {item.reason}
               </p>
             </div>

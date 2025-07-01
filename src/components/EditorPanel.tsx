@@ -59,7 +59,7 @@ export const EditorPanel = ({ selectedItem, onContentChange, onAnalyzeRequest }:
             <div key={field}>
               <label 
                 htmlFor={`${selectedItem.id}-${field}`} 
-                className="block text-sm font-medium text-codex-light-text-dim dark:text-codex-dark-text-dim mb-1" // Corrected label color
+                className="block text-sm font-medium text-base-content/70 mb-1" // Corrected label color
               >
                 {field}
               </label>
@@ -69,7 +69,7 @@ export const EditorPanel = ({ selectedItem, onContentChange, onAnalyzeRequest }:
                   rows={field.toLowerCase() === 'backstory' || field.toLowerCase() === 'description' ? 5 : 3}
                   value={content[field] || ''}
                   onChange={(e) => handleTemplateFieldChange(field, e.target.value)}
-                  className="w-full bg-codex-light-darker dark:bg-codex-dark-lighter border border-codex-light-darker dark:border-codex-dark-lighter rounded-md p-2.5 text-codex-light-text dark:text-codex-dark-text placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-codex-primary text-base shadow-sm" // Corrected BG and Text colors
+                  className="input input-bordered w-full" 
                 />
               ) : (
                 <input
@@ -77,7 +77,7 @@ export const EditorPanel = ({ selectedItem, onContentChange, onAnalyzeRequest }:
                   type="text"
                   value={content[field] || ''}
                   onChange={(e) => handleTemplateFieldChange(field, e.target.value)}
-                  className="w-full bg-codex-light-darker dark:bg-codex-dark-lighter border border-codex-light-darker dark:border-codex-dark-lighter rounded-md p-2.5 text-codex-light-text dark:text-codex-dark-text placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-codex-primary text-base shadow-sm" // Corrected BG and Text colors
+                  className="input input-bordered w-full" 
                 />
               )}
             </div>
@@ -92,22 +92,22 @@ export const EditorPanel = ({ selectedItem, onContentChange, onAnalyzeRequest }:
       <textarea
         value={typeof selectedItem.content === 'string' ? selectedItem.content : ''}
         onChange={(e) => onContentChange(e.target.value)}
-        className="flex-1 w-full p-6 md:p-8 bg-transparent text-codex-light-text dark:text-codex-dark-text resize-none focus:outline-none font-serif text-lg leading-relaxed" // Corrected Text colors
+        className="flex-1 w-full p-6 md:p-8 bg-base-100 text-base-content resize-none focus:outline-none font-serif text-lg leading-relaxed" // Corrected Text colors
         placeholder="Start writing your masterpiece..."
       />
     );
   };
 
   return (
-    <main className="flex-1 flex flex-col bg-codex-light-dark dark:bg-codex-dark-light overflow-hidden w-[55%]">
-      <div className="p-3 border-b border-codex-light-darker dark:border-codex-dark-lighter flex justify-between items-center flex-shrink-0">
-        <h2 className="px-2 text-base font-semibold text-codex-light-text dark:text-codex-dark-text truncate" title={selectedItem.title}> {/* Corrected title text color */}
+    <main className="flex-1 flex flex-col bg-base-200 overflow-hidden w-[55%]">
+      <div className="p-3 border-b border-base-300 flex justify-between items-center flex-shrink-0">
+        <h2 className="px-2 text-base font-semibold text-base-content truncate" title={selectedItem.title}> {/* Corrected title text color */}
           {selectedItem.title}
         </h2>
         <button
           onClick={onAnalyzeRequest}
           disabled={typeof selectedItem.content !== 'string' || (selectedItem.content as string).trim().length < 10}
-          className="bg-codex-primary hover:bg-codex-primary-dark text-white font-medium py-1.5 px-4 rounded-md text-sm transition-colors shadow-sm disabled:bg-slate-500 dark:disabled:bg-slate-700 disabled:cursor-not-allowed disabled:text-slate-400 dark:disabled:text-slate-500"
+          className="btn btn-primary py-1.5 px-4 text-sm shadow-sm disabled:bg-base-300 disabled:cursor-not-allowed disabled:text-base-content/50"
           title={typeof selectedItem.content !== 'string' ? "Analysis is only available for Manuscript documents" : "Analyze this document"}
         >
           Analyze

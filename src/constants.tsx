@@ -46,11 +46,18 @@ export const AddIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   </svg>
 );
 
+export const PlotLinesIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4" {...props}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+  </svg>
+);
+
 export const TEMPLATES: Record<string, string[]> = {
   [DocumentType.CharacterSheet]: ['Role', 'Goal', 'Motivation', 'Flaw', 'Backstory'],
   [DocumentType.Location]: ['Description', 'Atmosphere', 'History', 'Key Points of Interest'],
   [DocumentType.Lore]: ['Summary', 'Rules', 'Impact on World'],
   [DocumentType.Research]: ['Source URL', 'Key Takeaways', 'Quotes', 'Notes'],
+  [DocumentType.PlotLines]: ['Plot', 'Setting', 'Characters', 'Conflict', 'Resolution'],
 };
 
 export const getIconForItemType = (type: DocumentType): React.ReactNode => {
@@ -65,6 +72,8 @@ export const getIconForItemType = (type: DocumentType): React.ReactNode => {
       return <LoreIcon />;
     case DocumentType.Research:
       return <ResearchIcon />;
+    case DocumentType.PlotLines:
+      return <PlotLinesIcon />;
     default:
       // This case should ideally not be reached if all DocumentType values are handled above.
       // The exhaustive check pattern `const exhaustiveCheck: never = type;` can sometimes
@@ -78,135 +87,65 @@ export const getIconForItemType = (type: DocumentType): React.ReactNode => {
 export const INITIAL_BINDER_ITEMS: BinderItem[] = [
   {
     id: 'folder-manuscript',
-    title: 'Manuscript', 
+    title: 'Manuscript',
     type: 'Folder',
     icon: <FolderIcon />,
     level: 0,
     isOpen: true,
-    content: {}, 
-    children: [
-      { 
-        id: 'manuscript-1', 
-        title: 'Chapter 1: The Awakening', 
-        type: DocumentType.Manuscript, 
-        icon: <ManuscriptIcon />, 
-        level: 1,
-        content: "The old house stood on a hill overlooking the town. It had stood there for a hundred years, and for all that time, it had been empty. Or so they said.\n\nElara pulled her cloak tighter. The wind was biting tonight, carrying the scent of rain and something else... something ancient and unsettling. She wasn't supposed to be here. Her grandmother had warned her, her voice a low tremor, 'Some doors are best left unopened, child.'\n\nBut Elara was not a child anymore. And this door, the one creaking softly on its hinges at the top of the hill, called to her."
-      },
-      { 
-        id: 'manuscript-2', 
-        title: 'Chapter 2: Whispers in the Dark', 
-        type: DocumentType.Manuscript, 
-        icon: <ManuscriptIcon />, 
-        level: 1, 
-        content: "Inside, dust lay thick as a shroud. Moonlight, fractured by grimy windowpanes, painted eerie shapes on the decaying furniture. Every footstep echoed in the oppressive silence. Then, she heard it - a whisper, faint as a dying breath, from the shadows at the end of the hall." 
-      },
-      { 
-        id: 'manuscript-3', 
-        title: 'Chapter 3: Unseen Eyes', 
-        type: DocumentType.Manuscript, 
-        icon: <ManuscriptIcon />, 
-        level: 1, 
-        content: "She froze, heart hammering against her ribs. The whisper came again, closer this time, seeming to swirl around her. It wasn't words she could understand, but a feeling... a cold dread mixed with an undeniable pull." 
-      },
-    ]
+    content: {},
+    children: [],
   },
   {
     id: 'folder-characters',
-    title: 'Characters', 
+    title: 'Characters',
     type: 'Folder',
     icon: <FolderIcon />,
     level: 0,
-    isOpen: true, 
+    isOpen: true,
     content: {},
-    children: [
-      { 
-        id: 'char-elara', 
-        title: 'Elara Meadowlight', 
-        type: DocumentType.CharacterSheet, 
-        icon: <CharacterIcon />,
-        level: 1,
-        content: {
-          'Role': 'Protagonist',
-          'Goal': 'Uncover the secrets of the abandoned house and her family\'s connection to it.',
-          'Motivation': 'A recurring dream, a sense of belonging she can\'t explain, a desire to prove her grandmother wrong.',
-          'Flaw': 'Impulsive and headstrong, often acts before thinking through the consequences.',
-          'Backstory': 'Grew up hearing whispered tales about the house. Her family has a mysterious past tied to it. Feels like an outsider in her own village.'
-        }
-      },
-    ]
+    children: [],
   },
-   {
+  {
     id: 'folder-locations',
-    title: 'Locations', 
+    title: 'Locations',
     type: 'Folder',
     icon: <FolderIcon />,
     level: 0,
     isOpen: false,
     content: {},
-    children: [
-      { 
-        id: 'loc-oldhouse', 
-        title: 'The Old Hill House', 
-        type: DocumentType.Location, 
-        icon: <LocationIcon />,
-        level: 1,
-        content: {
-          'Description': 'A dilapidated Victorian-era mansion on a windswept hill. Overgrown gardens, boarded-up windows on the lower floors. One window on the top floor seems to glow faintly at night.',
-          'Atmosphere': 'Foreboding, mysterious, melancholic. Locals avoid it, especially after dark.',
-          'History': 'The house was built by the eccentric inventor Alistair Blackwood in 1888. Blackwood vanished without a trace, leaving behind strange contraptions and rumors of forbidden experiments.',
-          'Key Points of Interest': 'Grand oak door, winding staircase, a library filled with rotting books, a sealed room in the basement.'
-        }
-      },
-    ]
+    children: [],
   },
   {
     id: 'folder-lore',
-    title: 'Lore', 
+    title: 'Lore',
     type: 'Folder',
     icon: <FolderIcon />,
     level: 0,
     isOpen: false,
     content: {},
-    children: [
-      { 
-        id: 'lore-whispers', 
-        title: 'The Whispering Sickness', 
-        type: DocumentType.Lore, 
-        icon: <LoreIcon />,
-        level: 1,
-        content: {
-          'Summary': 'An ancient magical ailment or curse associated with the Old Hill House.',
-          'Rules': 'Victims hear faint whispers, become paranoid, gradually lose their connection to reality. In advanced stages, they might speak in unknown tongues or exhibit strange powers. Physical contact with artifacts from the house can trigger it in susceptible individuals.',
-          'Impact on World': 'The reason the house has remained abandoned for so long. The source of local legends and fear.'
-        }
-      },
-    ]
+    children: [],
   },
-   {
+  {
     id: 'folder-research',
-    title: 'Research & Notes', 
+    title: 'Research & Notes',
     type: 'Folder',
     icon: <FolderIcon />,
     level: 0,
     isOpen: false,
     content: {},
-    children: [
-      { 
-        id: 'research-history', 
-        title: 'Local History Notes', 
-        type: DocumentType.Research, 
-        icon: <ResearchIcon />,
-        level: 1,
-        content: {
-          'Source URL': 'Town Archives Digital Portal (link)',
-          'Key Takeaways': 'House built 1888 by Alistair Blackwood. No record of sale since. Blackwood family line died out or moved away.',
-          'Quotes': '"...the Blackwood estate, a place of sorrow and shadows..." - Local newspaper, 1923.',
-          'Notes': '- Check town archives for records of the house\'s original owners.\n- Interview old Mrs. Gable - she\'s lived in the village her whole life, might know more stories.\n- Research local folklore related to hilltop dwellings and \'watchers\'.\n- Look into historical instances of \'mass hysteria\' or unexplained illnesses in the region.'
-        }
-      },
-    ]
+    children: [],
+  },
+  {
+    id: 'folder-plot-lines',
+    title: 'Plot Lines',
+    type: 'Folder',
+    icon: <FolderIcon />,
+    level: 0,
+    isOpen: false,
+    content: {},
+    children: [],
   },
 ];
+
 
 export const GEMINI_MODEL_NAME = "gemini-2.5-flash-preview-04-17";

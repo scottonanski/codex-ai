@@ -101,8 +101,8 @@ const AIPanel: React.FC<AIPanelProps> = ({
   }, [userInput, messages, binderItems]); 
 
   return (
-    <aside className="w-[25%] min-w-[300px] max-w-[450px] flex-shrink-0 bg-codex-light-dark dark:bg-codex-dark-light border-l border-codex-light-darker dark:border-codex-dark-lighter p-0 flex flex-col shadow-md">
-      <div className="flex border-b border-codex-light-darker dark:border-codex-dark-lighter flex-shrink-0" role="tablist" aria-label="AI Tools">
+    <aside className="w-[25%] min-w-[300px] max-w-[450px] flex-shrink-0 bg-base-200 border-l border-base-300 p-0 flex flex-col shadow-md text-base-content">
+      <div className="flex border-b border-base-300 flex-shrink-0" role="tablist" aria-label="AI Tools">
         <TabButton
           label="Muse Chat"
           isActive={activeTab === 'museChat'}

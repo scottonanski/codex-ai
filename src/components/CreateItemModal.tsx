@@ -5,24 +5,36 @@ import { DocumentType } from '../types';
 interface CreateItemModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (title: string, type?: DocumentType) => void;
+  onCreate: (title: string, type?: DocumentType | undefined, parentId?: string | null) => void;
   parentId: string | null;
+  folders: { id: string; name: string }[]; // <-- Changed to array
   mode?: 'document' | 'folder'; // NEW
 }
 
-export const CreateItemModal: React.FC<CreateItemModalProps> = ({ isOpen, onClose, onCreate, mode = 'document' }) => {
+export const CreateItemModal: React.FC<CreateItemModalProps> = ({
+  isOpen,
+  onClose,
+  onCreate,
+  parentId,
+  folders = [],
+  mode = 'document',
+}) => {
   const [title, setTitle] = useState('');
   const [type, setType] = useState<DocumentType>(DocumentType.Manuscript);
+  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(
+    parentId || (folders && folders[0] ? folders[0].id : null)
+  );
 
   useEffect(() => {
     // Reset form when modal opens
     if (isOpen) {
       setTitle('');
       setType(DocumentType.Manuscript); // Default to Manuscript
+      setSelectedFolderId(parentId || (folders && folders[0] ? folders[0].id : null)); // Reset folder selection
     }
     // If switching to folder mode, no need to set type
 
-  }, [isOpen]);
+  }, [isOpen, parentId, folders]);
 
   if (!isOpen) return null;
   const isFolderMode = mode === 'folder';
@@ -31,9 +43,9 @@ export const CreateItemModal: React.FC<CreateItemModalProps> = ({ isOpen, onClos
     e.preventDefault();
     if (title.trim()) {
       if (isFolderMode) {
-        onCreate(title.trim());
+        onCreate(title.trim(), undefined, selectedFolderId);
       } else {
-        onCreate(title.trim(), type);
+        onCreate(title.trim(), type, selectedFolderId);
       }
       // onClose(); // App.tsx's handleCreateItem will call onClose via setIsCreateModalOpen(false)
     }
@@ -56,36 +68,30 @@ export const CreateItemModal: React.FC<CreateItemModalProps> = ({ isOpen, onClos
       aria-labelledby="create-item-title"
     >
       <div 
-        className="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-6 w-full max-w-md" 
+        className="bg-base-100 rounded-lg shadow-xl p-6 w-full max-w-md" 
         onClick={e => e.stopPropagation()} // Prevent click inside from closing
       >
-        <h2 
-          id="create-item-title" 
-          className="text-xl font-bold mb-4 text-slate-900 dark:text-white"
-        >
-          {isFolderMode ? 'Create New Folder' : 'Create New Document'}
-        </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="item-title" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Title</label>
+            <label htmlFor="item-title" className="block text-sm font-medium text-base-content/70 mb-1">Title</label>
             <input
               type="text"
               id="item-title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md p-2 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="w-full p-2.5 border bg-base-200 border-base-300 rounded-md bg-base-100 focus:ring-1 focus:ring-primary focus:border-primary outline-none text-sm disabled:opacity-70" aria-label="Create item title input"
               required
               autoFocus
             />
           </div>
           {!isFolderMode && (
             <div className="mb-6">
-              <label htmlFor="item-type" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Type</label>
+              <label htmlFor="item-type" className="block text-sm font-medium text-base-content/70 mb-1">Type</label>
               <select
                 id="item-type"
                 value={type}
                 onChange={(e) => setType(e.target.value as DocumentType)}
-                className="w-full bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md p-2 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                className="w-full flex-1 p-2.5 border border-base-300 rounded-md bg-base-100 focus:ring-1 focus:ring-primary focus:border-primary outline-none text-sm disabled:opacity-70"
               >
                 {documentTypeOptions.map((docType: string) => (
                   <option key={docType} value={docType}>{docType}</option>
@@ -93,17 +99,33 @@ export const CreateItemModal: React.FC<CreateItemModalProps> = ({ isOpen, onClos
               </select>
             </div>
           )}
+          <div className="mb-4">
+            <label htmlFor="folder-select" className="block text-sm font-medium text-base-content/70 mb-1">
+              Destination Folder
+            </label>
+            <select
+              id="folder-select"
+              value={selectedFolderId ?? ''}
+              onChange={e => setSelectedFolderId(e.target.value)}
+              className="w-full p-2.5 border border-base-300 rounded-md bg-base-100 focus:ring-1 focus:ring-primary focus:border-primary outline-none text-sm"
+            >
+              <option value="">(Root)</option>
+              {folders.map(folder => (
+                <option key={folder.id} value={folder.id}>{folder.name}</option>
+              ))}
+            </select>
+          </div>
           <div className="flex justify-end gap-4">
             <button 
               type="button" 
               onClick={onClose} 
-              className="px-4 py-2 rounded-md text-slate-700 dark:text-slate-300 bg-transparent hover:bg-slate-100 dark:hover:bg-slate-700"
+              className="btn btn-ghost btn-error px-4 py-2 font-semibold"
             >
               Cancel
             </button>
             <button 
               type="submit" 
-              className="px-4 py-2 rounded-md text-white bg-sky-600 hover:bg-sky-500 font-semibold"
+              className="btn btn-primary px-4 py-2 font-semibold"
             >
               Create
             </button>

@@ -6,6 +6,7 @@ export enum DocumentType {
   Location = "Location Profile",
   Lore = "Lore Entry",
   Research = "Research Note",
+  PlotLines = "Plot Lines"
 }
 
 export type BinderItemType = DocumentType | 'Folder';

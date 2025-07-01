@@ -17,6 +17,7 @@ import { addItemToTree, findItemByIdRecursive, updateItemInTree } from './utils'
 const App: React.FC = () => {
   const [theme, setTheme] = useState<Theme>('light');
   const [binderItems, setBinderItems] = useState<BinderItem[]>(INITIAL_BINDER_ITEMS);
+  const [createItemMode, setCreateItemMode] = useState<'document' | 'folder'>('document');
   
   const findFirstDocumentRecursive = (items: BinderItem[]): BinderItem | null => {
     for (const item of items) {
@@ -128,8 +129,20 @@ const App: React.FC = () => {
     }
   }, [selectedItem]);
 
-  const handleCreateItem = (title: string, type?: DocumentType) => {
-    const parentId = selectedItem && selectedItem.type === 'Folder' ? selectedItem.id : null;
+  // Utility to flatten all folders in the binder tree
+  function flattenFolders(items: BinderItem[]): { id: string; name: string }[] {
+    let result: { id: string; name: string }[] = [];
+    for (const item of items) {
+      if (item.type === 'Folder') {
+        result.push({ id: item.id, name: item.title });
+        if (item.children) result = result.concat(flattenFolders(item.children));
+      }
+    }
+    return result;
+  }
+
+  // Updated handleCreateItem to accept parentId
+  const handleCreateItem = (title: string, type?: DocumentType, parentId?: string | null) => {
     let newLevel = 0;
     const docType = type ?? DocumentType.Manuscript;
 
@@ -139,21 +152,19 @@ const App: React.FC = () => {
             newLevel = parentFolder.level + 1;
         } else {
           console.error("Parent folder not found for new item, defaulting to root.");
-          // This case should ideally not happen if parentId is derived from selectedItem
         }
     }
 
     const newItem: BinderItem = {
-        id: `item-${Date.now().toString()}`, // Unique ID
-        title,
-        type: docType, // This is DocumentType, not 'Folder'
-        content: docType === DocumentType.Manuscript ? '' : Object.fromEntries(TEMPLATES[docType]?.map(field => [field, '']) || []),
-        level: newLevel,
-        icon: getIconForItemType(docType),
-        children: undefined, // Documents don't have children
+      id: `item-${Date.now().toString()}`,
+      title,
+      type: docType, // This is DocumentType, not 'Folder'
+      content: docType === DocumentType.Manuscript ? '' : Object.fromEntries(TEMPLATES[docType]?.map(field => [field, '']) || []),
+      level: newLevel,
+      icon: getIconForItemType(docType),
+      children: undefined, // Documents don't have children
     };
-    
-    setBinderItems(prevItems => addItemToTree(prevItems, parentId, newItem));
+    setBinderItems(prevItems => addItemToTree(prevItems, parentId ?? null, newItem));
     toast.success(`'${title}' (${type}) created successfully!`);
     setIsCreateModalOpen(false); // Close the modal
     handleSelectItem(newItem); // Automatically select the new item for editing
@@ -285,7 +296,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen antialiased bg-codex-light dark:bg-codex-dark text-codex-light-text dark:text-codex-dark-text">
+    <div className="flex flex-col h-screen antialiased bg-base-100 dark:bg-base-900 text-base-content dark:text-base-content">
       <Toaster
         position="bottom-center"
         toastOptions={{
@@ -314,22 +325,21 @@ const App: React.FC = () => {
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onCreate={handleCreateItem}
-        parentId={selectedItem?.type === 'Folder' ? selectedItem.id : null}
-        mode="document"
+        parentId={selectedItem?.id ?? null}
+        folders={flattenFolders(binderItems)}
+        mode={createItemMode}
       />
       <CreateItemModal
         isOpen={isCreateFolderModalOpen}
         onClose={() => setIsCreateFolderModalOpen(false)}
         onCreate={handleCreateFolder}
         parentId={null}
+        folders={flattenFolders(binderItems)}
         mode="folder"
       />
-      <header className="px-4 py-2 border-b border-codex-light-darker dark:border-codex-dark-lighter flex items-center justify-between shadow-sm flex-shrink-0">
+      <header className="px-4 py-2 border-b border-white/10 flex items-center justify-between flex-shrink-0">
         <div className="flex items-center space-x-2">
-          <Logo className="h-8 w-8 text-codex-primary dark:text-codex-primary" />
-          <h1 className="text-xl font-semibold font-serif">
-            Codex <span className="font-normal text-sm text-codex-light-text-dim dark:text-codex-dark-text-dim">AI Writing Studio</span>
-          </h1>
+          <Logo className="h-8 w-8" />
         </div>
         <ThemeToggle theme={theme} onToggle={handleThemeToggle} />
       </header>
@@ -340,8 +350,13 @@ const App: React.FC = () => {
             items={binderItems}
             selectedItem={selectedItem}
             onSelectItem={handleSelectItem}
-            onOpenCreateModal={() => setIsCreateModalOpen(true)}
-            onCreateFolder={() => setIsCreateFolderModalOpen(true)}
+            onOpenCreateModal={() => {
+             setCreateItemMode('document');
+             setIsCreateModalOpen(true);
+           }}
+           onCreateFolder={() => {
+             setIsCreateFolderModalOpen(true);
+           }}
           />
         </DndContext>
         <EditorPanel
@@ -358,8 +373,8 @@ const App: React.FC = () => {
           binderItems={binderItems}
         />
       </div>
-       <footer className="px-4 py-1 border-t border-codex-light-darker dark:border-codex-dark-light text-center text-xs text-codex-light-text-dim dark:text-codex-dark-text-dim flex-shrink-0">
-        Codex AI - Your Creative Partner. API Key for Gemini must be configured for AI features.
+       <footer className="px-4 py-4 bg-base-300 border-t border-white/10 text-center text-xs text-base-content/50 flex-shrink-0">
+        Codex AI - Your Creative Ai Writing Partner.
       </footer>
     </div>
   );

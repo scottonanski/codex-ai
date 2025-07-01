@@ -5,7 +5,10 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({ className }) => (
-  <div className={className} style={{ fontWeight: 'bold', fontSize: 24 }}>Codex Logo</div>
+  <div className={className} style={{ fontWeight: 'bold', fontSize: 24 }}>
+    <span className="text-primary">Codex</span>
+    <span className="text-primary">Ai</span>
+    </div>
 );
 
 

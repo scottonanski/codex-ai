@@ -48,10 +48,10 @@ const MuseChatTab: React.FC<MuseChatTabProps> = ({
   };
 
   return (
-    <div className="p-3 sm:p-4 flex flex-col h-full bg-codex-light dark:bg-codex-dark">
+    <div className="p-3 sm:p-4 flex flex-col h-full bg-base-100">
       {/* Show context injection message if present */}
       {injectedContextMessage && (
-        <div className="mb-2 px-3 py-2 rounded bg-yellow-100 dark:bg-yellow-900 text-yellow-900 dark:text-yellow-100 text-sm text-center font-medium animate-fade-in">
+        <div className="mb-2 px-3 py-2 rounded bg-warning text-warning-content text-sm text-center font-medium animate-fade-in">
           {injectedContextMessage}
         </div>
       )}
@@ -61,17 +61,16 @@ const MuseChatTab: React.FC<MuseChatTabProps> = ({
             <div 
               className={`max-w-[85%] p-2.5 sm:p-3 rounded-lg shadow-sm text-sm sm:text-[0.9rem] leading-snug
                 ${msg.sender === 'ai' 
-                ? 'bg-codex-light-darker dark:bg-codex-dark-lighter text-codex-light-text dark:text-codex-dark-text rounded-tl-none sm:rounded-tl-none' 
-                : 'bg-codex-primary text-white rounded-tr-none sm:rounded-tr-none'
+                ? 'bg-base-200 text-base-content rounded-tl-none sm:rounded-tl-none' 
+                : 'bg-primary text-primary-content rounded-tr-none sm:rounded-tr-none'
               }`}
             >
               <p className="whitespace-pre-wrap">{msg.text}</p>
               {msg.sender === 'ai' && msg.showAddButton && (
                 <button
                   onClick={() => onAddToManuscript(msg.text)}
-                  className="mt-2 text-xs flex items-center space-x-1.5 opacity-75 hover:opacity-100 transition-opacity
-                             bg-transparent hover:bg-black/10 dark:hover:bg-white/10 p-1.5 rounded
-                             text-codex-light-text-dim dark:text-codex-dark-text-dim hover:text-codex-light-text dark:hover:text-codex-dark-text"
+                  className="mt-8 text-xs font-medium flex items-center space-x-2 hover:opacity-100
+                            text-primary-content hover:bg-primary hover:text-primary-content p-1.5 rounded-sm"
                   title="Add to manuscript"
                   aria-label="Add AI response to manuscript"
                 >
@@ -84,7 +83,7 @@ const MuseChatTab: React.FC<MuseChatTabProps> = ({
         ))}
         {isLoading && (
           <div className="flex justify-start">
-             <div className="max-w-[85%] p-2.5 sm:p-3 rounded-lg shadow-sm text-sm sm:text-[0.9rem] leading-snug bg-codex-light-darker dark:bg-codex-dark-lighter text-codex-light-text dark:text-codex-dark-text rounded-tl-none sm:rounded-tl-none flex items-center space-x-2">
+             <div className="max-w-[85%] p-2.5 sm:p-3 rounded-lg shadow-sm text-sm sm:text-[0.9rem] leading-snug bg-base-200 text-base-content rounded-tl-none sm:rounded-tl-none flex items-center space-x-2">
                 <Loader size="sm" />
                 <span>Muse is thinking...</span>
             </div>
@@ -93,14 +92,8 @@ const MuseChatTab: React.FC<MuseChatTabProps> = ({
         <div ref={messagesEndRef} />
       </div>
       
-      {/* Optional: Display chatError if passed and handled here
-      {chatError && (
-        <div className="my-2 p-2 text-red-600 dark:text-red-400 border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/50 rounded-md text-xs">
-          {chatError}
-        </div>
-      )} */}
 
-      <form onSubmit={handleFormSubmit} className="mt-auto pt-3 border-t border-codex-light-darker dark:border-codex-dark-lighter flex-shrink-0">
+      <form onSubmit={handleFormSubmit} className="mt-auto pt-3 border-t border-base-300 flex-shrink-0">
         <div className="flex items-center space-x-2">
           <input
             ref={inputRef}
@@ -108,13 +101,13 @@ const MuseChatTab: React.FC<MuseChatTabProps> = ({
             value={userInput}
             onChange={(e) => onUserInputChange(e.target.value)}
             placeholder="Chat with your Muse..."
-            className="flex-1 p-2.5 border border-codex-light-darker dark:border-codex-dark-lighter rounded-md bg-codex-light dark:bg-codex-dark focus:ring-1 focus:ring-codex-primary focus:border-codex-primary outline-none text-sm disabled:opacity-70"
+            className="flex-1 p-2.5 border border-base-300 rounded-md bg-base-100 focus:ring-1 focus:ring-primary focus:border-primary outline-none text-sm disabled:opacity-70"
             aria-label="Muse chat input"
             disabled={isLoading}
           />
           <button 
             type="submit"
-            className="px-4 py-2.5 bg-codex-primary hover:bg-codex-primary-dark text-white font-medium rounded-md text-sm shadow focus:outline-none focus:ring-2 focus:ring-codex-primary focus:ring-opacity-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2.5 btn btn-primary text-base-content font-medium text-sm shadow focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLoading || !userInput.trim()}
           >
             {isLoading ? <Loader size="sm" color="text-white"/> : 'Send'}

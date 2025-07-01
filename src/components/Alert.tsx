@@ -8,12 +8,12 @@ interface AlertProps {
 }
 
 const Alert: React.FC<AlertProps> = ({ type, message, onClose }) => {
-  const baseClasses = "p-4 rounded-md shadow-md flex items-start space-x-3";
+  const baseClasses = "alert flex items-start space-x-3";
   const typeClasses = {
-    success: "bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300 border border-green-300 dark:border-green-700",
-    error: "bg-red-50 text-red-700 dark:bg-red-900 dark:text-red-300 border border-red-300 dark:border-red-700",
-    warning: "bg-yellow-50 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300 border border-yellow-300 dark:border-yellow-700",
-    info: "bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300 border border-blue-300 dark:border-blue-700",
+    success: "alert-success",
+    error: "alert-error",
+    warning: "alert-warning",
+    info: "alert-info",
   };
 
   const Icon: React.FC<{ type: AlertProps['type'] }> = ({ type }) => {
@@ -29,13 +29,13 @@ const Alert: React.FC<AlertProps> = ({ type, message, onClose }) => {
         <Icon type={type} />
       </div>
       <div className="flex-1">
-        <p className="text-sm font-medium">{message}</p>
+        <p className="text-sm font-medium text-base-content">{message}</p>
       </div>
       {onClose && (
         <div className="flex-shrink-0">
           <button
             onClick={onClose}
-            className={`-mx-1.5 -my-1.5 p-1.5 rounded-md focus:outline-none focus:ring-2 
+            className={`btn btn-ghost btn-xs p-1.5 rounded-md focus:outline-none focus:ring-2 
               ${type === 'success' ? 'hover:bg-green-100 dark:hover:bg-green-800 focus:ring-green-600 dark:focus:ring-green-500' : ''}
               ${type === 'error' ? 'hover:bg-red-100 dark:hover:bg-red-800 focus:ring-red-600 dark:focus:ring-red-500' : ''}
               ${type === 'warning' ? 'hover:bg-yellow-100 dark:hover:bg-yellow-800 focus:ring-yellow-600 dark:focus:ring-yellow-500' : ''}
